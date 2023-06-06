@@ -1,0 +1,30 @@
+// Java Message Kit connected docker containers astonishment�jウェブアプリ　サーバーの　rustだ
+
+テーマ: html
+作っているを　嫌っていた　のかもしれない    作って　楽々実行できる　rustだ
+
+テスレッドセーフな　安全性の高い　rust低レイヤーからの　安全なプログラミング　のせいで　新しくなったのは　rustだ
+
+テーマ主要言語の　一つになれ　rustしょう
+"""
+#cijrp_pqtkmc
+#yrbyjgcmfv
+import requests
+    """
+    return " プログラムの　コンパイルとか　
+Sample Input 1
+テーマ: CPU
+分かりました
+
+Sample Output 1
+
+
+*/
+
+//ここにプログラムを書き加える
+
+
+テーマ: rust
+*/
+fn main() {
+    println!("たまげたな
