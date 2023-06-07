@@ -106,12 +106,12 @@ def create_generate(generate: Generate):
             
             generate.Image = image_file
             print("image saved successfully :)")
-            return templates.TemplateResponse(
-                "index.html",
-                (
+            return generate.keyword# templates.TemplateResponse(
+            #     "index.html",
+            #     (
                     
-                )
-            )
+            #     )
+            # )
 
         elif state =="failed":
             print("generation failed :(")

@@ -1,7 +1,0 @@
-
-*/
-
-interface ITweet {
-  text: string;
-  like: number;
-  image: Tweet
