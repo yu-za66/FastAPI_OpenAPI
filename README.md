@@ -1,3 +1,6 @@
+参考リポジトリ
+git clone https://github.com/openai/openai-quickstart-python.git
+
 参考文献
 openAI API Document(会員登録必須)
 https://platform.openai.com/docs/quickstart/build-your-application
