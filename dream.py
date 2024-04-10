@@ -2,13 +2,21 @@ import os
 import uuid
 from typing import Union
 import random
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from pydantic import BaseModel 
 from pathlib import Path
 import requests , json , time
 from dotenv import load_dotenv
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+ 
+
 from supabase import create_client, Client
+
 
 load_dotenv('.env')
 
@@ -35,13 +43,24 @@ HEADERS = {
         'Content-Type': 'application/json'
     }
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.get("/dream", response_class=HTMLResponse)
+async def render_html(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
 @app.post("/dream")
 
-def create_generate(generate: Generate):
+def create_generate(generate:Generate):
+    
+    
+    
+    generate.keyword = json.dumps(requests.body())
 
     # 絵のスタイル、公式参照
     style_id = random.randint(1,21)
-    # キーワード
     prompt = generate.keyword
     # 与える画像のパス、イメージを付けれる
     target_img_path=None
@@ -49,6 +68,7 @@ def create_generate(generate: Generate):
     post_payload = json.dumps({
         "use_target_image": bool(target_img_path)
     })
+    
     post_response = requests.request(
         "POST", BASE_URL, headers=HEADERS, data=post_payload , verify=False)
 
@@ -86,7 +106,7 @@ def create_generate(generate: Generate):
             "GET", task_id_url, headers=HEADERS).json()
 
         state = response_json["state"]
-  
+
         #生成に成功したら
         if state == "completed":
             r = requests.request(
@@ -97,24 +117,41 @@ def create_generate(generate: Generate):
             sample_id = uuid.uuid4()
             # 自分のファイルを保存
             # uuidを用いて上書きを防ぐ。
-            with open("設置したフォルダのパスを記述" + generate.keyword +"\\" + generate.keyword + "{}({})".format(style_id,sample_id) + ".jpg", 'wb') as image_file:
+            with open("c:\\プログラミング\\python\\API\\back\\media\\images\\" + generate.keyword +"\\" + generate.keyword + "{}({})".format(style_id,sample_id) + ".jpg", 'wb') as image_file:
                 image_file.write(r.content)
 
-                # ファイルのアップロード 
+            # ファイルのアップロード 
             # res = supabase.storage.from_('test').upload("test/images", os.path.abspath("C:\\プログラミング\\python\\back API\\back\\media\\images\\" + generate.keyword +"\\" + generate.keyword + "_I.jpg"))
             # with open("C:\\プログラミング\\python\\back API\\back\\media\\images\\" + generate.keyword +"\\" + generate.keyword + ".jpg", "wb") as image_file:
             
             generate.Image = image_file
             print("image saved successfully :)")
-            return generate.keyword# templates.TemplateResponse(
-            #     "index.html",
-            #     (
-                    
-            #     )
-            # )
 
+            r = render_result_html(requests.request, style_id, generate.Image,generate.keyword)
+
+            if 'json' in HEADERS.get('content-type'):
+                result = r.json()
+                print(result)
+            else:
+                result = r.text
+                print(result)
+
+            return r
+        
         elif state =="failed":
             print("generation failed :(")
             break
+        
+        def render_result_html(request: requests, id: int , image:Generate , keyword:str): 
 
-        time.sleep(3)
+            response_data = {
+                "request": request,
+                "id": style_id,
+                "keyword": generate.keyword,
+                "image": generate.Image
+            }
+
+            return response_data.json()
+    
+        
+        time.sleep(3)    

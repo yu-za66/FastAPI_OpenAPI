@@ -8,6 +8,10 @@ import os
 from pathlib import Path
 # .envから
 from dotenv import load_dotenv
+
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
 load_dotenv('.env')
 class Generate(BaseModel):
     keyword: str
@@ -21,11 +25,12 @@ app = FastAPI()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 openai.Model.list()
 
-@app.post("/gpt")
+@app.post("/gpt",response_class=HTMLResponse)
 
 async def create_generate(generate: Generate):
-    # htmlのmethodを参照
-    
+        # インスタンスを作成
+        templates = Jinja2Templates(directory='templates')
+
         # htmlでname=formから取得
         # 自動でjsonにしてくれる
         key = generate.keyword

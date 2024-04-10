@@ -2,22 +2,26 @@
 <head>
   <meta charset="UTF-8">
 
-  <title>OpenAI Quickstart</title>
+  <title>OpenAI</title>
   <link
     rel="shortcut icon"
-    href="{{ url_for('static', filename='dog.png') }}"
+    href="{{ url_for('static', path='/dog.png') }}"
   />
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}" />
 </head>
 
+<div>Style_id is {{ id }}</div>
+
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
+  <img src="{{ url_for('static', path='/dog.png') }}" class="icon" />
   <h3>Name my pet</h3>
-  <form action="/" method="post">
-    <input type="text" name="key" placeholder="Enter an animal" required />
-    <input type="submit" value="Generate names" />
+  <form action="/dream" method="post">
+    <input type="text" name="keyword" placeholder="Enter an word" required />
+    <input type="submit" value="Generate" />
   </form>
   {% if result %}
-  <div class="result">{{ result }}</div>
+  <div class="result">{{ image }}</div>
   {% endif %}
+
+
 </body>
